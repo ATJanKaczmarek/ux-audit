@@ -44,8 +44,9 @@ export default function HomePage() {
           <span className="text-brand-400">in minutes</span>
         </h1>
         <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-10">
-          Enter any URL to get a comprehensive UX audit — accessibility, performance, visual hierarchy,
-          navigation, forms, readability, mobile, and CTA effectiveness — with AI-powered insights.
+          Enter any URL to get a comprehensive UX audit — accessibility, performance, visual
+          hierarchy, navigation, forms, readability, mobile, and CTA effectiveness — with AI-powered
+          insights.
         </p>
 
         <UrlForm />
@@ -82,14 +83,14 @@ export default function HomePage() {
             {recentScans.map((scan) => (
               <a
                 key={scan.id}
-                href={
-                  scan.status === "complete" ? `/report/${scan.id}` : `/scan/${scan.id}`
-                }
+                href={scan.status === "complete" ? `/report/${scan.id}` : `/scan/${scan.id}`}
                 className="flex items-center gap-4 p-4 bg-gray-900/60 border border-gray-800 rounded-xl hover:border-gray-700 transition-colors"
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-200 truncate">{scan.url}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{formatRelativeTime(scan.created_at)}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {formatRelativeTime(scan.created_at)}
+                  </p>
                 </div>
                 <span className={`text-xs font-medium capitalize ${getStatusColor(scan.status)}`}>
                   {scan.status}

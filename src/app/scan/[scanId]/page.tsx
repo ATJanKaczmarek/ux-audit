@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
 import { ScanProgress } from "@/components/scan/scan-progress";
 import { getScan } from "@/lib/db";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ scanId: string }>;

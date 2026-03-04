@@ -33,7 +33,10 @@ export function FlowMap({ flows }: FlowMapProps) {
     return (
       <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800">
         <h2 className="text-lg font-semibold text-white mb-4">User Flow Map</h2>
-        <p className="text-gray-500 text-sm">No user flows detected. This site may not have recognizable flow patterns (signup, checkout, etc.).</p>
+        <p className="text-gray-500 text-sm">
+          No user flows detected. This site may not have recognizable flow patterns (signup,
+          checkout, etc.).
+        </p>
       </div>
     );
   }
@@ -57,10 +60,7 @@ function FlowDiagram({ flow }: { flow: DetectedFlow }) {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-3">
-        <div
-          className="w-3 h-3 rounded-full flex-shrink-0"
-          style={{ backgroundColor: color }}
-        />
+        <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
         <h3 className="font-medium text-gray-200">{FLOW_LABELS[flow.type]} Flow</h3>
         <span className="text-xs text-gray-500">{flow.pages.length} pages</span>
         <div className="ml-auto flex items-center gap-2">
@@ -98,13 +98,15 @@ function FlowDiagram({ flow }: { flow: DetectedFlow }) {
                 }}
                 title={node.url}
               >
-                {node.hasForms && (
-                  <span className="mr-1 opacity-60">⬜</span>
-                )}
+                {node.hasForms && <span className="mr-1 opacity-60">⬜</span>}
                 {pathname}
               </div>
               {i < flow.pages.length - 1 && (
-                <svg className="w-4 h-4 text-gray-700 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg
+                  className="w-4 h-4 text-gray-700 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
                   <path
                     fillRule="evenodd"
                     d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"

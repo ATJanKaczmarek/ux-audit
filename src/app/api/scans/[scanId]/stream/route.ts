@@ -1,7 +1,7 @@
-import { NextRequest } from "next/server";
-import { subscribeScan, isScanDone } from "@/lib/scan-store";
 import { getScan } from "@/lib/db";
+import { isScanDone, subscribeScan } from "@/lib/scan-store";
 import type { ScanEvent } from "@/types/scan";
+import type { NextRequest } from "next/server";
 
 function formatSSE(event: ScanEvent): string {
   const data = JSON.stringify(event);

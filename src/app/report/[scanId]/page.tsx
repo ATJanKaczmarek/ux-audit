@@ -1,10 +1,10 @@
-import { notFound } from "next/navigation";
-import { getScan, getScanResult } from "@/lib/db";
-import { ScoreOverview } from "@/components/report/score-overview";
-import { FindingsList } from "@/components/report/findings-list";
-import { FlowMap } from "@/components/report/flow-map";
-import { PageDetails } from "@/components/report/page-details";
 import { AIInsightsPanel } from "@/components/report/ai-insights-panel";
+import { FindingsList } from "@/components/report/findings-list";
+import { FlowDiagram } from "@/components/report/flow-diagram";
+import { PageDetails } from "@/components/report/page-details";
+import { ScoreOverview } from "@/components/report/score-overview";
+import { getScan, getScanResult } from "@/lib/db";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ scanId: string }>;
@@ -89,21 +89,21 @@ export default async function ReportPage({ params }: Props) {
       {/* Severity summary strip */}
       {(criticalCount > 0 || highCount > 0) && (
         <div className="mb-6 flex items-center gap-3 p-3 bg-red-950/30 border border-red-900/50 rounded-xl">
-          <svg className="w-4 h-4 text-red-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <svg
+            className="w-4 h-4 text-red-400 flex-shrink-0"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
             <path
               fillRule="evenodd"
               d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
             />
           </svg>
           <p className="text-sm text-red-300">
-            {criticalCount > 0 && (
-              <span className="font-semibold">{criticalCount} critical</span>
-            )}
+            {criticalCount > 0 && <span className="font-semibold">{criticalCount} critical</span>}
             {criticalCount > 0 && highCount > 0 && " and "}
-            {highCount > 0 && (
-              <span className="font-semibold">{highCount} high</span>
-            )}{" "}
-            severity issue{criticalCount + highCount !== 1 ? "s" : ""} require immediate attention.
+            {highCount > 0 && <span className="font-semibold">{highCount} high</span>} severity
+            issue{criticalCount + highCount !== 1 ? "s" : ""} require immediate attention.
           </p>
         </div>
       )}
@@ -111,16 +111,13 @@ export default async function ReportPage({ params }: Props) {
       {/* Main content grid */}
       <div className="space-y-6">
         {/* Score overview — full width */}
-        <ScoreOverview
-          overallScore={result.overallScore}
-          categoryScores={result.categoryScores}
-        />
+        <ScoreOverview overallScore={result.overallScore} categoryScores={result.categoryScores} />
 
-        {/* Two-column: AI insights + Flow map */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <AIInsightsPanel insights={result.aiInsights} />
-          <FlowMap flows={result.detectedFlows} />
-        </div>
+        {/* Flow diagram — full width */}
+        <FlowDiagram flows={result.detectedFlows} pages={result.pages} />
+
+        {/* AI insights — full width */}
+        <AIInsightsPanel insights={result.aiInsights} />
 
         {/* Findings list — full width */}
         <FindingsList findings={result.findings} />

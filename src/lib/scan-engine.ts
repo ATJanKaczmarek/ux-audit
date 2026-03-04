@@ -1,18 +1,18 @@
-import { crawlSite } from "./crawler/crawler";
-import { runLighthouseAudits } from "./auditors/lighthouse-auditor";
-import { runAccessibilityAudit } from "./auditors/accessibility-auditor";
-import { runVisualHierarchyAudit } from "./auditors/visual-hierarchy-auditor";
-import { runNavigationAudit } from "./auditors/navigation-auditor";
-import { runFormsAudit } from "./auditors/forms-auditor";
-import { runReadabilityAudit } from "./auditors/readability-auditor";
-import { runMobileAudit } from "./auditors/mobile-auditor";
-import { runCtaAudit } from "./auditors/cta-auditor";
-import { detectFlows } from "./flow-detector";
+import type { AuditResult, ScanResult } from "@/types/scan";
 import { aggregateScanResults } from "./aggregator";
 import { generateAIInsights } from "./ai-analyzer";
+import { runAccessibilityAudit } from "./auditors/accessibility-auditor";
+import { runCtaAudit } from "./auditors/cta-auditor";
+import { runFormsAudit } from "./auditors/forms-auditor";
+import { runLighthouseAudits } from "./auditors/lighthouse-auditor";
+import { runMobileAudit } from "./auditors/mobile-auditor";
+import { runNavigationAudit } from "./auditors/navigation-auditor";
+import { runReadabilityAudit } from "./auditors/readability-auditor";
+import { runVisualHierarchyAudit } from "./auditors/visual-hierarchy-auditor";
+import { crawlSite } from "./crawler/crawler";
 import { completeScan, failScan, updateScanStatus } from "./db";
-import { emitScanEvent, cleanupScan } from "./scan-store";
-import type { AuditResult, ScanResult } from "@/types/scan";
+import { detectFlows } from "./flow-detector";
+import { cleanupScan, emitScanEvent } from "./scan-store";
 
 const SCAN_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
 
@@ -69,7 +69,11 @@ async function doScan(scanId: string, url: string, startTime: number): Promise<v
   emitScanEvent(scanId, { event: "audit_complete", category: "accessibility" });
 
   // ── Step 3: Lighthouse (performance) ────────────────────────────────────────
-  emitScanEvent(scanId, { event: "lighthouse_progress", index: 0, total: Math.min(5, pages.length) });
+  emitScanEvent(scanId, {
+    event: "lighthouse_progress",
+    index: 0,
+    total: Math.min(5, pages.length),
+  });
 
   const { metrics: lighthouseMetrics, auditResult: performanceResult } = await runLighthouseAudits(
     pages.map((p) => p.url),

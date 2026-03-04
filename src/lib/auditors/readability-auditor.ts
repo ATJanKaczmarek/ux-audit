@@ -1,4 +1,4 @@
-import type { PageData, AuditResult, Finding } from "@/types/scan";
+import type { AuditResult, Finding, PageData } from "@/types/scan";
 import { v4 as uuidv4 } from "uuid";
 
 interface ReadabilityMetrics {
@@ -89,7 +89,8 @@ export function runReadabilityAudit(pages: PageData[]): AuditResult {
         description: `Average sentence is ${metrics.avgSentenceLength} words — recommended: 15-20 words.`,
         affectedPages: [page.url],
         evidence: `Avg sentence length: ${metrics.avgSentenceLength} words`,
-        remediation: "Break long sentences into shorter ones. Use bullet points for list-style content.",
+        remediation:
+          "Break long sentences into shorter ones. Use bullet points for list-style content.",
       });
     } else {
       passedChecks++;
@@ -117,10 +118,8 @@ export function runReadabilityAudit(pages: PageData[]): AuditResult {
   // Aggregate score
   let score = 100;
   if (pageMetrics.length > 0) {
-    const avgGrade =
-      pageMetrics.reduce((s, m) => s + m.fleschKincaidGrade, 0) / pageMetrics.length;
-    const avgFRE =
-      pageMetrics.reduce((s, m) => s + m.fleschReadingEase, 0) / pageMetrics.length;
+    const avgGrade = pageMetrics.reduce((s, m) => s + m.fleschKincaidGrade, 0) / pageMetrics.length;
+    const avgFRE = pageMetrics.reduce((s, m) => s + m.fleschReadingEase, 0) / pageMetrics.length;
 
     if (avgGrade <= 8) score = 100;
     else if (avgGrade <= 10) score = 85;

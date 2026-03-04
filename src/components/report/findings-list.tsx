@@ -1,9 +1,12 @@
 "use client";
 
+import type { AuditCategory, Finding, Severity } from "@/types/scan";
 import { useState } from "react";
-import type { Finding, Severity, AuditCategory } from "@/types/scan";
 
-const SEVERITY_CONFIG: Record<Severity, { label: string; color: string; bg: string; border: string }> = {
+const SEVERITY_CONFIG: Record<
+  Severity,
+  { label: string; color: string; bg: string; border: string }
+> = {
   critical: {
     label: "Critical",
     color: "text-red-400",
@@ -137,9 +140,7 @@ function FindingCard({ finding, expanded, onToggle }: FindingCardProps) {
                   </a>
                 ))}
                 {finding.affectedPages.length > 10 && (
-                  <p className="text-xs text-gray-600">
-                    +{finding.affectedPages.length - 10} more
-                  </p>
+                  <p className="text-xs text-gray-600">+{finding.affectedPages.length - 10} more</p>
                 )}
               </div>
             </div>
@@ -206,7 +207,9 @@ export function FindingsList({ findings }: FindingsListProps) {
               type="button"
               onClick={() => setSeverityFilter(sev)}
               className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                severityFilter === sev ? `${config.bg} ${config.color}` : "bg-gray-800 text-gray-400 hover:text-white"
+                severityFilter === sev
+                  ? `${config.bg} ${config.color}`
+                  : "bg-gray-800 text-gray-400 hover:text-white"
               }`}
             >
               {config.label} ({count})

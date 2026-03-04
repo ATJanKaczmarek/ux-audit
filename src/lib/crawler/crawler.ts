@@ -1,9 +1,16 @@
-import { PlaywrightCrawler, RequestQueue, Configuration } from "crawlee";
-import type { PageData, FormData, FormFieldData, HeadingData, LinkData, CTAData } from "@/types/scan";
-import { fetchSitemapUrls } from "./sitemap";
-import path from "path";
-import fs from "fs";
 import { createHash } from "crypto";
+import fs from "fs";
+import path from "path";
+import type {
+  CTAData,
+  FormData,
+  FormFieldData,
+  HeadingData,
+  LinkData,
+  PageData,
+} from "@/types/scan";
+import { Configuration, PlaywrightCrawler, RequestQueue } from "crawlee";
+import { fetchSitemapUrls } from "./sitemap";
 
 const MAX_PAGES = Number(process.env.MAX_PAGES ?? 50);
 const CONCURRENCY = 3;
@@ -242,12 +249,19 @@ export async function crawlSite(
           }
 
           // Gather DOM data
-          const domData = await page.evaluate(PAGE_EVAL_SCRIPT as unknown as () => unknown) as {
+          const domData = (await page.evaluate(PAGE_EVAL_SCRIPT as unknown as () => unknown)) as {
             headings: HeadingData[];
             forms: FormData[];
             links: LinkData[];
             ctas: CTAData[];
-            fonts: { selector: string; fontSize: number; fontWeight: number; lineHeight: number; color: string; backgroundColor: string }[];
+            fonts: {
+              selector: string;
+              fontSize: number;
+              fontWeight: number;
+              lineHeight: number;
+              color: string;
+              backgroundColor: string;
+            }[];
             hasViewportMeta: boolean;
             viewportContent: string;
             hasBreadcrumbs: boolean;

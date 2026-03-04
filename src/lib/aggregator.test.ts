@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { aggregateScanResults, getSeveritySummary, getScoreLabel } from "./aggregator";
 import type { AuditResult } from "@/types/scan";
+import { describe, expect, it } from "vitest";
+import { aggregateScanResults, getScoreLabel, getSeveritySummary } from "./aggregator";
 
 function makeAuditResult(category: AuditResult["category"], score: number): AuditResult {
   return { category, score, findings: [], passedChecks: 5, totalChecks: 5 };
@@ -57,9 +57,36 @@ describe("aggregateScanResults", () => {
 describe("getSeveritySummary", () => {
   it("counts by severity", () => {
     const findings = [
-      { severity: "critical" as const, id: "1", category: "accessibility" as const, title: "", description: "", affectedPages: [], evidence: "", remediation: "" },
-      { severity: "high" as const, id: "2", category: "accessibility" as const, title: "", description: "", affectedPages: [], evidence: "", remediation: "" },
-      { severity: "high" as const, id: "3", category: "forms" as const, title: "", description: "", affectedPages: [], evidence: "", remediation: "" },
+      {
+        severity: "critical" as const,
+        id: "1",
+        category: "accessibility" as const,
+        title: "",
+        description: "",
+        affectedPages: [],
+        evidence: "",
+        remediation: "",
+      },
+      {
+        severity: "high" as const,
+        id: "2",
+        category: "accessibility" as const,
+        title: "",
+        description: "",
+        affectedPages: [],
+        evidence: "",
+        remediation: "",
+      },
+      {
+        severity: "high" as const,
+        id: "3",
+        category: "forms" as const,
+        title: "",
+        description: "",
+        affectedPages: [],
+        evidence: "",
+        remediation: "",
+      },
     ];
     const summary = getSeveritySummary(findings);
     expect(summary.critical).toBe(1);

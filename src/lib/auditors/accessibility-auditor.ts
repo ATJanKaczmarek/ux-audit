@@ -1,4 +1,4 @@
-import type { PageData, AxeViolation, AuditResult, Finding } from "@/types/scan";
+import type { AuditResult, AxeViolation, Finding, PageData } from "@/types/scan";
 import { chromium } from "playwright";
 import { v4 as uuidv4 } from "uuid";
 
@@ -95,7 +95,9 @@ export async function runAccessibilityAudit(
   }
 
   const score = Math.max(0, Math.min(100, 100 - deduction));
-  const criticalCount = allViolations.filter((v) => v.impact === "critical" || v.impact === "serious").length;
+  const criticalCount = allViolations.filter(
+    (v) => v.impact === "critical" || v.impact === "serious",
+  ).length;
 
   return {
     violations: allViolations,
@@ -139,7 +141,7 @@ function inferWcagRef(ruleId: string): string {
   const wcagMap: Record<string, string> = {
     "color-contrast": "WCAG 1.4.3",
     "image-alt": "WCAG 1.1.1",
-    "label": "WCAG 1.3.1",
+    label: "WCAG 1.3.1",
     "button-name": "WCAG 4.1.2",
     "link-name": "WCAG 2.4.4",
     "html-lang-valid": "WCAG 3.1.1",
@@ -147,11 +149,11 @@ function inferWcagRef(ruleId: string): string {
     "document-title": "WCAG 2.4.2",
     "heading-order": "WCAG 1.3.1",
     "landmark-one-main": "WCAG 1.3.6",
-    "region": "WCAG 1.3.6",
+    region: "WCAG 1.3.6",
     "skip-link": "WCAG 2.4.1",
-    "tabindex": "WCAG 2.4.3",
+    tabindex: "WCAG 2.4.3",
     "focus-trap": "WCAG 2.1.2",
-    "keyboard": "WCAG 2.1.1",
+    keyboard: "WCAG 2.1.1",
   };
   return wcagMap[ruleId] ?? "";
 }

@@ -1,4 +1,4 @@
-import type { PageData, AuditResult, Finding } from "@/types/scan";
+import type { AuditResult, Finding, PageData } from "@/types/scan";
 import { v4 as uuidv4 } from "uuid";
 
 const ACTION_VERB_PATTERN =
@@ -18,7 +18,8 @@ export function runCtaAudit(pages: PageData[]): AuditResult {
         category: "cta",
         severity: "medium",
         title: "No CTA Detected",
-        description: "Page has no identifiable call-to-action elements — users may not know what to do next.",
+        description:
+          "Page has no identifiable call-to-action elements — users may not know what to do next.",
         affectedPages: [page.url],
         evidence: "No button or CTA elements found",
         remediation:
@@ -42,7 +43,8 @@ export function runCtaAudit(pages: PageData[]): AuditResult {
         description: "No CTA is visible without scrolling — this reduces conversion rates.",
         affectedPages: [page.url],
         evidence: `${page.ctas.length} CTA(s) found, all below fold`,
-        remediation: "Move the primary action button to the hero section visible without scrolling.",
+        remediation:
+          "Move the primary action button to the hero section visible without scrolling.",
         heuristicRef: "Nielsen #7: Flexibility and efficiency of use",
       });
     } else {
@@ -70,9 +72,7 @@ export function runCtaAudit(pages: PageData[]): AuditResult {
 
     // Check 4: Action-verb CTA text
     totalChecks++;
-    const ctasWithoutActionVerb = page.ctas.filter(
-      (c) => !c.isActionVerb && c.text.length < 50,
-    );
+    const ctasWithoutActionVerb = page.ctas.filter((c) => !c.isActionVerb && c.text.length < 50);
     if (ctasWithoutActionVerb.length > 0 && page.ctas.length > 0) {
       findings.push({
         id: uuidv4(),
@@ -107,7 +107,8 @@ export function runCtaAudit(pages: PageData[]): AuditResult {
         description: `${smallCTAs.length} above-fold CTA(s) appear small and may not draw enough visual attention.`,
         affectedPages: [page.url],
         evidence: `Smallest CTA: ${Math.min(...smallCTAs.map((c) => c.width))}×${Math.min(...smallCTAs.map((c) => c.height))}px`,
-        remediation: "Ensure primary CTA buttons are at least 120px wide and 40px tall for prominence.",
+        remediation:
+          "Ensure primary CTA buttons are at least 120px wide and 40px tall for prominence.",
       });
     } else if (aboveFoldCTAs.length > 0) {
       passedChecks++;

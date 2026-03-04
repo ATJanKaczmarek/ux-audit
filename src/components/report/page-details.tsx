@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import type { PageData } from "@/types/scan";
+import { useState } from "react";
 
 interface PageDetailsProps {
   pages: PageData[];
@@ -48,9 +48,7 @@ export function PageDetails({ pages }: PageDetailsProps) {
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-200 truncate">{pathname}</p>
-                  {h1 && (
-                    <p className="text-xs text-gray-500 truncate">{h1.text}</p>
-                  )}
+                  {h1 && <p className="text-xs text-gray-500 truncate">{h1.text}</p>}
                 </div>
                 <div className="flex items-center gap-3 flex-shrink-0">
                   {page.screenshotPath && (
@@ -69,14 +67,21 @@ export function PageDetails({ pages }: PageDetailsProps) {
                     </span>
                   )}
                   <span className="text-xs text-gray-600">{page.wordCount} words</span>
-                  <span className="text-xs text-gray-600">{page.forms.length} form{page.forms.length !== 1 ? "s" : ""}</span>
+                  <span className="text-xs text-gray-600">
+                    {page.forms.length} form{page.forms.length !== 1 ? "s" : ""}
+                  </span>
                   <svg
                     className={`w-4 h-4 text-gray-600 transition-transform ${isExpanded ? "rotate-180" : ""}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </div>
               </button>
@@ -140,7 +145,10 @@ export function PageDetails({ pages }: PageDetailsProps) {
                       <Issue text="No H1 heading" severity="high" />
                     )}
                     {page.touchTargetViolations > 5 && (
-                      <Issue text={`${page.touchTargetViolations} small touch targets`} severity="high" />
+                      <Issue
+                        text={`${page.touchTargetViolations} small touch targets`}
+                        severity="high"
+                      />
                     )}
                     {page.forms.some((f) => f.fields.some((fi) => !fi.hasLabel)) && (
                       <Issue text="Form fields missing labels" severity="medium" />
@@ -181,9 +189,5 @@ function Issue({ text, severity }: { text: string; severity: "critical" | "high"
     high: "text-orange-400",
     medium: "text-yellow-400",
   };
-  return (
-    <p className={`text-xs ${colors[severity]}`}>
-      ● {text}
-    </p>
-  );
+  return <p className={`text-xs ${colors[severity]}`}>● {text}</p>;
 }

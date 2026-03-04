@@ -147,10 +147,7 @@ export function ScoreOverview({ overallScore, categoryScores }: ScoreOverviewPro
               <span className="text-xs text-gray-400 text-center leading-tight">
                 {CATEGORY_LABELS[cs.category] ?? cs.category}
               </span>
-              <span
-                className="text-xs font-medium"
-                style={{ color: getScoreColor(cs.score) }}
-              >
+              <span className="text-xs font-medium" style={{ color: getScoreColor(cs.score) }}>
                 {getScoreLabel(cs.score)}
               </span>
             </div>

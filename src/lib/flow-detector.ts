@@ -1,10 +1,13 @@
-import type { PageData, DetectedFlow, FlowNode, FlowEdge, FlowType } from "@/types/scan";
+import type { DetectedFlow, FlowEdge, FlowNode, FlowType, PageData } from "@/types/scan";
 
 // URL pattern → flow type mapping
 const URL_FLOW_PATTERNS: Array<{ pattern: RegExp; type: FlowType }> = [
   { pattern: /\/(register|signup|sign-up|create-account|join|new-user)/i, type: "signup" },
   { pattern: /\/(login|sign-in|signin|auth|log-in)/i, type: "login" },
-  { pattern: /\/(cart|checkout|order|payment|billing|shipping|purchase|confirm)/i, type: "checkout" },
+  {
+    pattern: /\/(cart|checkout|order|payment|billing|shipping|purchase|confirm)/i,
+    type: "checkout",
+  },
   { pattern: /\/(onboarding|welcome|setup|getting-started|tour|intro)/i, type: "onboarding" },
   { pattern: /\/(search|results)/i, type: "search" },
   { pattern: /\/(contact|support|help|feedback|ticket|inquiry)/i, type: "contact" },
@@ -16,10 +19,7 @@ function classifyPageByDOM(page: PageData): FlowType | null {
   const hasEmailAndPassword =
     page.forms.some((f) =>
       f.fields.some((field) => field.type === "email" || field.name.includes("email")),
-    ) &&
-    page.forms.some((f) =>
-      f.fields.some((field) => field.type === "password"),
-    );
+    ) && page.forms.some((f) => f.fields.some((field) => field.type === "password"));
 
   const hasPaymentFields = page.forms.some((f) =>
     f.fields.some(
@@ -41,7 +41,10 @@ function classifyPageByDOM(page: PageData): FlowType | null {
   );
 
   if (hasPaymentFields) return "checkout";
-  if (hasEmailAndPassword && page.forms.some((f) => f.submitButtonText.toLowerCase().includes("register")))
+  if (
+    hasEmailAndPassword &&
+    page.forms.some((f) => f.submitButtonText.toLowerCase().includes("register"))
+  )
     return "signup";
   if (hasEmailAndPassword) return "login";
   if (hasAddressFields) return "checkout";
@@ -60,10 +63,7 @@ function classifyPage(page: PageData): FlowType {
   return classifyPageByDOM(page) ?? "unknown";
 }
 
-export function detectFlows(
-  pages: PageData[],
-  urlGraph: Record<string, string[]>,
-): DetectedFlow[] {
+export function detectFlows(pages: PageData[], urlGraph: Record<string, string[]>): DetectedFlow[] {
   // Classify each page
   const pageFlowMap = new Map<string, FlowType>();
   for (const page of pages) {
@@ -92,8 +92,7 @@ export function detectFlows(
       hasPaymentFields: p.forms.some((f) =>
         f.fields.some(
           (field) =>
-            field.name.toLowerCase().includes("card") ||
-            field.name.toLowerCase().includes("cvv"),
+            field.name.toLowerCase().includes("card") || field.name.toLowerCase().includes("cvv"),
         ),
       ),
     }));
@@ -106,7 +105,9 @@ export function detectFlows(
       const linkedPages = urlGraph[page.url] ?? [];
       for (const targetUrl of linkedPages) {
         if (flowUrls.has(targetUrl)) {
-          const linkData = page.links.find((l) => l.href === targetUrl || l.href.startsWith(targetUrl));
+          const linkData = page.links.find(
+            (l) => l.href === targetUrl || l.href.startsWith(targetUrl),
+          );
           edges.push({
             from: page.url,
             to: targetUrl,
@@ -188,8 +189,7 @@ function identifyFlowIssues(flowType: FlowType, pages: PageData[]): string[] {
       p.forms.some((f) =>
         f.fields.some(
           (field) =>
-            field.name.toLowerCase().includes("card") ||
-            field.name.toLowerCase().includes("cvv"),
+            field.name.toLowerCase().includes("card") || field.name.toLowerCase().includes("cvv"),
         ),
       ),
     );

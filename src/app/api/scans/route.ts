@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";
-import { z } from "zod";
 import { createScan } from "@/lib/db";
 import { runScanPipeline } from "@/lib/scan-engine";
+import { type NextRequest, NextResponse } from "next/server";
+import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
 
 const StartScanSchema = z.object({
   url: z.string().url("Please enter a valid URL"),
@@ -18,7 +18,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   const parsed = StartScanSchema.safeParse(body);
   if (!parsed.success) {
-    return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid input" }, { status: 400 });
+    return NextResponse.json(
+      { error: parsed.error.issues[0]?.message ?? "Invalid input" },
+      { status: 400 },
+    );
   }
 
   const { url } = parsed.data;

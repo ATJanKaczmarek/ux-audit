@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
-import { runVisualHierarchyAudit } from "./visual-hierarchy-auditor";
 import type { PageData } from "@/types/scan";
+import { describe, expect, it } from "vitest";
+import { runVisualHierarchyAudit } from "./visual-hierarchy-auditor";
 
 function makePage(overrides: Partial<PageData> = {}): PageData {
   return {

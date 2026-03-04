@@ -1,22 +1,22 @@
 import type {
-  AuditResult,
-  CategoryScore,
-  Finding,
-  ScanResult,
-  PageData,
-  LighthouseMetrics,
-  AxeViolation,
-  DetectedFlow,
   AuditCategory,
+  AuditResult,
+  AxeViolation,
+  CategoryScore,
+  DetectedFlow,
+  Finding,
+  LighthouseMetrics,
+  PageData,
+  ScanResult,
 } from "@/types/scan";
 
 // Category weights must sum to 1.0
 const CATEGORY_WEIGHTS: Record<AuditCategory, number> = {
   accessibility: 0.25,
-  performance: 0.20,
+  performance: 0.2,
   visual_hierarchy: 0.15,
-  navigation: 0.10,
-  forms: 0.10,
+  navigation: 0.1,
+  forms: 0.1,
   content_quality: 0.08,
   mobile: 0.07,
   cta: 0.05,
@@ -57,7 +57,9 @@ export function aggregateScanResults(params: {
 
   // Fill in missing categories with default score
   const coveredCategories = new Set(auditResults.map((r) => r.category));
-  for (const [category, weight] of Object.entries(CATEGORY_WEIGHTS) as Array<[AuditCategory, number]>) {
+  for (const [category, weight] of Object.entries(CATEGORY_WEIGHTS) as Array<
+    [AuditCategory, number]
+  >) {
     if (!coveredCategories.has(category)) {
       categoryScores.push({
         category,

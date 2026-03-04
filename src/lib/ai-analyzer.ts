@@ -1,5 +1,5 @@
+import type { AIInsights, FlowType, ScanResult } from "@/types/scan";
 import Anthropic from "@anthropic-ai/sdk";
-import type { ScanResult, AIInsights, FlowType } from "@/types/scan";
 
 const client = new Anthropic();
 
@@ -109,7 +109,12 @@ function parsePriorities(text: string): AIInsights["topPriorities"] {
 
     // Extract title (between ** if present)
     const titleMatch = line.match(/\*\*([^*]+)\*\*/);
-    const title = titleMatch ? titleMatch[1] : line.replace(/^\d+\.\s/, "").split("—")[0].trim();
+    const title = titleMatch
+      ? titleMatch[1]
+      : line
+          .replace(/^\d+\.\s/, "")
+          .split("—")[0]
+          .trim();
 
     // Extract rationale
     const parts = line.split("—");
@@ -162,10 +167,7 @@ export async function generateAIInsights(
     });
 
     for await (const chunk of stream) {
-      if (
-        chunk.type === "content_block_delta" &&
-        chunk.delta.type === "text_delta"
-      ) {
+      if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
         fullText += chunk.delta.text;
         onChunk(chunk.delta.text);
       }

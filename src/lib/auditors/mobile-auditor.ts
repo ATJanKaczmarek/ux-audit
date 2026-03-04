@@ -1,4 +1,4 @@
-import type { PageData, AuditResult, Finding } from "@/types/scan";
+import type { AuditResult, Finding, PageData } from "@/types/scan";
 import { v4 as uuidv4 } from "uuid";
 
 export function runMobileAudit(pages: PageData[]): AuditResult {
@@ -32,10 +32,12 @@ export function runMobileAudit(pages: PageData[]): AuditResult {
           category: "mobile",
           severity: "high",
           title: "Pinch-to-Zoom Disabled",
-          description: "Viewport meta tag disables user scaling (user-scalable=no), which is an accessibility barrier.",
+          description:
+            "Viewport meta tag disables user scaling (user-scalable=no), which is an accessibility barrier.",
           affectedPages: [page.url],
           evidence: `viewport: ${page.viewportContent}`,
-          remediation: "Remove user-scalable=no and maximum-scale=1 restrictions from the viewport meta tag.",
+          remediation:
+            "Remove user-scalable=no and maximum-scale=1 restrictions from the viewport meta tag.",
           wcagRef: "WCAG 1.4.4",
         });
       } else {
@@ -67,7 +69,8 @@ export function runMobileAudit(pages: PageData[]): AuditResult {
         description: `${page.touchTargetViolations} interactive element(s) are smaller than 44px.`,
         affectedPages: [page.url],
         evidence: `${page.touchTargetViolations} violations`,
-        remediation: "Increase touch target sizes to at least 44x44px for all interactive elements.",
+        remediation:
+          "Increase touch target sizes to at least 44x44px for all interactive elements.",
         wcagRef: "WCAG 2.5.5",
       });
       passedChecks++; // Minor issue
@@ -83,7 +86,8 @@ export function runMobileAudit(pages: PageData[]): AuditResult {
         category: "mobile",
         severity: "critical",
         title: "Horizontal Scroll / Overflow",
-        description: "Page content extends beyond the viewport width, forcing users to scroll horizontally.",
+        description:
+          "Page content extends beyond the viewport width, forcing users to scroll horizontally.",
         affectedPages: [page.url],
         evidence: "Horizontal overflow detected at 1440px viewport",
         remediation:

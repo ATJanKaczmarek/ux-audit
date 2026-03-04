@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getScan, getScanResult } from "@/lib/db";
+import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   _request: NextRequest,

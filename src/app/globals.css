@@ -8,7 +8,7 @@
   --color-brand-400: oklch(70% 0.17 260);
   --color-brand-500: oklch(60% 0.22 260);
   --color-brand-600: oklch(52% 0.22 260);
-  --color-brand-700: oklch(44% 0.20 260);
+  --color-brand-700: oklch(44% 0.2 260);
   --color-brand-800: oklch(36% 0.17 260);
   --color-brand-900: oklch(28% 0.13 260);
 
@@ -20,20 +20,27 @@
 }
 
 @layer base {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+      sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
 
 /* Score gauge animation */
 @keyframes gauge-fill {
-  from { stroke-dashoffset: var(--gauge-circumference); }
-  to { stroke-dashoffset: var(--gauge-offset); }
+  from {
+    stroke-dashoffset: var(--gauge-circumference);
+  }
+  to {
+    stroke-dashoffset: var(--gauge-offset);
+  }
 }
 
 .gauge-arc {
@@ -42,8 +49,13 @@
 
 /* SSE progress pulse */
 @keyframes progress-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .progress-pulse {

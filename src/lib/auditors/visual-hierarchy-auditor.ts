@@ -1,4 +1,4 @@
-import type { PageData, AuditResult, Finding } from "@/types/scan";
+import type { AuditResult, Finding, PageData } from "@/types/scan";
 import { v4 as uuidv4 } from "uuid";
 
 export function runVisualHierarchyAudit(pages: PageData[]): AuditResult {
@@ -102,7 +102,8 @@ export function runVisualHierarchyAudit(pages: PageData[]): AuditResult {
         category: "visual_hierarchy",
         severity: "medium",
         title: "No CTA Above the Fold",
-        description: "All CTAs are below the fold — users may not see the primary action without scrolling.",
+        description:
+          "All CTAs are below the fold — users may not see the primary action without scrolling.",
         affectedPages: [page.url],
         evidence: `${page.ctas.length} CTA(s) found, all below fold`,
         remediation: "Move the primary call-to-action to the hero section above the fold.",

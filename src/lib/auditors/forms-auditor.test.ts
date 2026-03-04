@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
+import type { FormData, PageData } from "@/types/scan";
+import { describe, expect, it } from "vitest";
 import { runFormsAudit } from "./forms-auditor";
-import type { PageData, FormData } from "@/types/scan";
 
 function makeForm(overrides: Partial<FormData> = {}): FormData {
   return {
@@ -49,7 +49,17 @@ describe("runFormsAudit", () => {
 
   it("flags unlabeled fields", () => {
     const form = makeForm({
-      fields: [{ type: "text", name: "name", label: "", hasLabel: false, hasPlaceholderAsLabel: false, hasAutocomplete: false, isRequired: true }],
+      fields: [
+        {
+          type: "text",
+          name: "name",
+          label: "",
+          hasLabel: false,
+          hasPlaceholderAsLabel: false,
+          hasAutocomplete: false,
+          isRequired: true,
+        },
+      ],
     });
     const result = runFormsAudit([makePage([form])]);
     expect(result.findings.some((f) => f.title.includes("Missing Labels"))).toBe(true);
@@ -58,7 +68,17 @@ describe("runFormsAudit", () => {
   it("flags generic submit button text", () => {
     const form = makeForm({
       submitButtonText: "Submit",
-      fields: [{ type: "email", name: "email", label: "Email", hasLabel: true, hasPlaceholderAsLabel: false, hasAutocomplete: true, isRequired: true }],
+      fields: [
+        {
+          type: "email",
+          name: "email",
+          label: "Email",
+          hasLabel: true,
+          hasPlaceholderAsLabel: false,
+          hasAutocomplete: true,
+          isRequired: true,
+        },
+      ],
     });
     const result = runFormsAudit([makePage([form])]);
     expect(result.findings.some((f) => f.title.includes("Generic Submit"))).toBe(true);

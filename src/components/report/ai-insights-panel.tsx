@@ -29,7 +29,12 @@ export function AIInsightsPanel({ insights }: AIInsightsPanelProps) {
     <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 space-y-6">
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 rounded-lg bg-brand-500/20 flex items-center justify-center">
-          <svg className="w-5 h-5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-5 h-5 text-brand-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -84,7 +89,9 @@ export function AIInsightsPanel({ insights }: AIInsightsPanelProps) {
           <div className="space-y-3">
             {insights.flowCommentary.map((fc, i) => (
               <div key={i} className="pl-3 border-l-2 border-brand-800/50">
-                <p className="text-xs text-brand-400 font-medium mb-1 capitalize">{fc.flowType} flow</p>
+                <p className="text-xs text-brand-400 font-medium mb-1 capitalize">
+                  {fc.flowType} flow
+                </p>
                 <p className="text-sm text-gray-300 leading-relaxed">{fc.assessment}</p>
               </div>
             ))}

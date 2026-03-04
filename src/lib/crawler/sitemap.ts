@@ -89,7 +89,9 @@ function deduplicateAndFilter(urls: string[], origin: string): string[] {
       const parsed = new URL(url);
       // Only same-origin URLs, no fragments, no files
       if (parsed.origin !== origin) continue;
-      if (/\.(pdf|jpg|jpeg|png|gif|svg|ico|css|js|xml|json|txt|zip|mp4|mp3)$/i.test(parsed.pathname))
+      if (
+        /\.(pdf|jpg|jpeg|png|gif|svg|ico|css|js|xml|json|txt|zip|mp4|mp3)$/i.test(parsed.pathname)
+      )
         continue;
       const normalized = parsed.origin + parsed.pathname + parsed.search;
       if (!seen.has(normalized)) {

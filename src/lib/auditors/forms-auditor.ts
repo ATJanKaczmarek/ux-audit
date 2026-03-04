@@ -1,4 +1,4 @@
-import type { PageData, AuditResult, Finding, FormData } from "@/types/scan";
+import type { AuditResult, Finding, FormData, PageData } from "@/types/scan";
 import { v4 as uuidv4 } from "uuid";
 
 const ACTION_VERB_PATTERN =

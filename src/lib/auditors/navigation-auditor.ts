@@ -1,4 +1,4 @@
-import type { PageData, AuditResult, Finding } from "@/types/scan";
+import type { AuditResult, Finding, PageData } from "@/types/scan";
 import { v4 as uuidv4 } from "uuid";
 
 export function runNavigationAudit(
@@ -27,7 +27,8 @@ export function runNavigationAudit(
       description: `${deepPages.length} pages are more than 3 clicks from the homepage (max depth: ${maxDepth}).`,
       affectedPages: deepPages.slice(0, 10),
       evidence: `Max depth: ${maxDepth}. Pages beyond 3 clicks: ${deepPages.length}`,
-      remediation: "Restructure IA to keep all important content within 3 clicks. Add shortcuts via featured/popular links.",
+      remediation:
+        "Restructure IA to keep all important content within 3 clicks. Add shortcuts via featured/popular links.",
       heuristicRef: "Nielsen #6: Recognition rather than recall",
     });
   } else if (maxDepth > 3) {
@@ -39,7 +40,8 @@ export function runNavigationAudit(
       description: `${deepPages.length} pages require 4 clicks to reach.`,
       affectedPages: deepPages.slice(0, 5),
       evidence: `Max depth: ${maxDepth}`,
-      remediation: "Consider adding cross-links or surface popular deep content in primary navigation.",
+      remediation:
+        "Consider adding cross-links or surface popular deep content in primary navigation.",
     });
   } else {
     passedChecks++;
@@ -78,7 +80,8 @@ export function runNavigationAudit(
       category: "navigation",
       severity: "low",
       title: "Missing Breadcrumb Navigation",
-      description: "No breadcrumbs found on pages with depth ≥ 2, making it harder for users to understand their location.",
+      description:
+        "No breadcrumbs found on pages with depth ≥ 2, making it harder for users to understand their location.",
       affectedPages: pagesNeedingBreadcrumbs.map((p) => p.url).slice(0, 5),
       evidence: `${pagesNeedingBreadcrumbs.length} pages at depth ≥2, ${pagesWithBreadcrumbs.length} have breadcrumbs`,
       remediation: "Add breadcrumb navigation with structured data markup (BreadcrumbList schema).",
@@ -104,7 +107,8 @@ export function runNavigationAudit(
         .map((p) => p.url)
         .slice(0, 5),
       evidence: `Pages with nav: ${navPages.length}/${pages.length}`,
-      remediation: "Ensure consistent navigation is present on all pages (global header/footer nav).",
+      remediation:
+        "Ensure consistent navigation is present on all pages (global header/footer nav).",
       heuristicRef: "Nielsen #4: Consistency and standards",
     });
   } else {
@@ -124,7 +128,8 @@ export function runNavigationAudit(
       description: `Primary navigation has ${primaryNavCount} items, exceeding the cognitive load threshold of 7±2.`,
       affectedPages: [pages[0]?.url ?? ""],
       evidence: `${primaryNavCount} nav items detected`,
-      remediation: "Group navigation items under fewer top-level categories. Aim for 5-7 primary nav items.",
+      remediation:
+        "Group navigation items under fewer top-level categories. Aim for 5-7 primary nav items.",
       heuristicRef: "Nielsen #7: Flexibility and efficiency of use",
     });
   } else if (primaryNavCount > 0) {

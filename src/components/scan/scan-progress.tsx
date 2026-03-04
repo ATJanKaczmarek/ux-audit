@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
 import type { ScanEvent } from "@/types/scan";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 interface ProgressState {
   phase: "crawling" | "analyzing" | "lighthouse" | "auditing" | "ai" | "complete" | "error";
@@ -159,11 +159,16 @@ export function ScanProgress({ scanId }: { scanId: string }) {
             <div
               className="h-full bg-brand-500 transition-all duration-300 rounded-full"
               style={{
-                width: state.crawlTotal > 0 ? `${(state.crawlCurrent / state.crawlTotal) * 100}%` : "10%",
+                width:
+                  state.crawlTotal > 0
+                    ? `${(state.crawlCurrent / state.crawlTotal) * 100}%`
+                    : "10%",
               }}
             />
           </div>
-          <p className="mt-2 text-xs text-gray-500 truncate">{state.lastUrl ?? "Starting crawl..."}</p>
+          <p className="mt-2 text-xs text-gray-500 truncate">
+            {state.lastUrl ?? "Starting crawl..."}
+          </p>
           <p className="text-xs text-gray-400">
             {state.crawlCurrent} / {state.crawlTotal || "?"} pages
           </p>
@@ -181,8 +186,7 @@ export function ScanProgress({ scanId }: { scanId: string }) {
                 !done &&
                 ((audit === "accessibility" && state.phase === "analyzing") ||
                   (audit === "performance" && state.phase === "lighthouse") ||
-                  (state.phase === "auditing" &&
-                    !state.completedAudits.includes(audit)));
+                  (state.phase === "auditing" && !state.completedAudits.includes(audit)));
               return (
                 <div key={audit} className="flex items-center gap-3">
                   <div
@@ -221,7 +225,9 @@ export function ScanProgress({ scanId }: { scanId: string }) {
                       <div className="w-1.5 h-1.5 rounded-full bg-gray-600" />
                     )}
                   </div>
-                  <span className={`text-sm ${done ? "text-gray-300" : running ? "text-brand-300" : "text-gray-600"}`}>
+                  <span
+                    className={`text-sm ${done ? "text-gray-300" : running ? "text-brand-300" : "text-gray-600"}`}
+                  >
                     {AUDIT_LABELS[audit] ?? audit}
                   </span>
                 </div>

@@ -1,4 +1,4 @@
-import type { LighthouseMetrics, AuditResult, Finding } from "@/types/scan";
+import type { AuditResult, Finding, LighthouseMetrics } from "@/types/scan";
 import { v4 as uuidv4 } from "uuid";
 
 const SAMPLE_SIZE = Number(process.env.LIGHTHOUSE_SAMPLE_SIZE ?? 5);
@@ -19,7 +19,9 @@ export async function runLighthouseAudits(
     const url = sample[i];
     let chrome;
     try {
-      chrome = await launch({ chromeFlags: ["--headless", "--no-sandbox", "--disable-setuid-sandbox"] });
+      chrome = await launch({
+        chromeFlags: ["--headless", "--no-sandbox", "--disable-setuid-sandbox"],
+      });
 
       const runnerResult = await lighthouse(url, {
         port: chrome.port,
@@ -35,11 +37,11 @@ export async function runLighthouseAudits(
       const audits = lhr.audits;
       const m: LighthouseMetrics = {
         url,
-        fcp: (audits["first-contentful-paint"]?.numericValue ?? 0),
-        lcp: (audits["largest-contentful-paint"]?.numericValue ?? 0),
-        cls: (audits["cumulative-layout-shift"]?.numericValue ?? 0),
-        tbt: (audits["total-blocking-time"]?.numericValue ?? 0),
-        si: (audits["speed-index"]?.numericValue ?? 0),
+        fcp: audits["first-contentful-paint"]?.numericValue ?? 0,
+        lcp: audits["largest-contentful-paint"]?.numericValue ?? 0,
+        cls: audits["cumulative-layout-shift"]?.numericValue ?? 0,
+        tbt: audits["total-blocking-time"]?.numericValue ?? 0,
+        si: audits["speed-index"]?.numericValue ?? 0,
         performanceScore: Math.round((lhr.categories.performance?.score ?? 0) * 100),
         accessibilityScore: Math.round((lhr.categories.accessibility?.score ?? 0) * 100),
       };
@@ -55,7 +57,8 @@ export async function runLighthouseAudits(
           description: `LCP of ${(m.lcp / 1000).toFixed(1)}s exceeds the 4s threshold on ${new URL(url).pathname}`,
           affectedPages: [url],
           evidence: `LCP: ${(m.lcp / 1000).toFixed(1)}s (threshold: ≤2.5s good, ≤4s needs improvement)`,
-          remediation: "Optimize images, eliminate render-blocking resources, use a CDN, and preload critical assets.",
+          remediation:
+            "Optimize images, eliminate render-blocking resources, use a CDN, and preload critical assets.",
           heuristicRef: "Nielsen #1: Visibility of system status",
         });
       } else if (m.lcp > 2500) {
@@ -80,7 +83,8 @@ export async function runLighthouseAudits(
           description: `CLS score of ${m.cls.toFixed(3)} causes unexpected layout shifts on ${new URL(url).pathname}`,
           affectedPages: [url],
           evidence: `CLS: ${m.cls.toFixed(3)} (threshold: ≤0.1 good)`,
-          remediation: "Set explicit dimensions on images and ads; avoid inserting content above existing content.",
+          remediation:
+            "Set explicit dimensions on images and ads; avoid inserting content above existing content.",
           wcagRef: "WCAG 1.4.13",
         });
       }
@@ -94,7 +98,8 @@ export async function runLighthouseAudits(
           description: `TBT of ${m.tbt}ms indicates heavy JavaScript execution on ${new URL(url).pathname}`,
           affectedPages: [url],
           evidence: `TBT: ${m.tbt}ms (threshold: ≤200ms good)`,
-          remediation: "Code-split JavaScript, defer non-critical scripts, reduce main thread work.",
+          remediation:
+            "Code-split JavaScript, defer non-critical scripts, reduce main thread work.",
         });
       }
     } catch (err) {

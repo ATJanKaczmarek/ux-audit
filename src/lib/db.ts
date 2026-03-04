@@ -1,7 +1,7 @@
-import Database from "better-sqlite3";
-import path from "path";
 import fs from "fs";
+import path from "path";
 import type { ScanResult, ScanRow, ScanStatus } from "@/types/scan";
+import Database from "better-sqlite3";
 
 const DB_PATH = process.env.DATABASE_PATH ?? path.join(process.cwd(), "data", "scans.db");
 
@@ -69,11 +69,7 @@ export function failScan(id: string, errorMessage: string): void {
     UPDATE scans
     SET status = 'error', completed_at = ?, result_json = ?
     WHERE id = ?
-  `).run(
-    Date.now(),
-    JSON.stringify({ errorMessage }),
-    id,
-  );
+  `).run(Date.now(), JSON.stringify({ errorMessage }), id);
 }
 
 export function getScan(id: string): ScanRow | null {
@@ -84,9 +80,7 @@ export function getScan(id: string): ScanRow | null {
 
 export function getRecentScans(limit = 10): ScanRow[] {
   const db = getDb();
-  return db
-    .prepare("SELECT * FROM scans ORDER BY created_at DESC LIMIT ?")
-    .all(limit) as ScanRow[];
+  return db.prepare("SELECT * FROM scans ORDER BY created_at DESC LIMIT ?").all(limit) as ScanRow[];
 }
 
 export function getScanResult(id: string): ScanResult | null {
