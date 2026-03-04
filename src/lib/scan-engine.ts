@@ -1,6 +1,7 @@
-import type { AuditResult, ScanResult } from "@/types/scan";
+import type { AIInsights, AuditResult, ScanResult } from "@/types/scan";
 import { aggregateScanResults } from "./aggregator";
 import { generateAIInsights } from "./ai-analyzer";
+import { detectFlowsWithAI } from "./ai-flow-detector";
 import { runAccessibilityAudit } from "./auditors/accessibility-auditor";
 import { runCtaAudit } from "./auditors/cta-auditor";
 import { runFormsAudit } from "./auditors/forms-auditor";
@@ -103,8 +104,14 @@ async function doScan(scanId: string, url: string, startTime: number): Promise<v
   const ctaResult = runCtaAudit(pages);
   emitScanEvent(scanId, { event: "audit_complete", category: "cta" });
 
-  // ── Step 5: Flow detection ────────────────────────────────────────────────────
-  const detectedFlows = detectFlows(pages, urlGraph);
+  // ── Step 5: Flow detection (AI-powered when API key available) ───────────────
+  const detectedFlows = process.env.ANTHROPIC_API_KEY
+    ? await detectFlowsWithAI(pages, urlGraph, (status) => {
+        console.log(`[scan-engine] Flow detection: ${status}`);
+      })
+    : detectFlows(pages, urlGraph);
+
+  emitScanEvent(scanId, { event: "audit_complete", category: "flows" });
 
   // ── Step 6: Aggregation ───────────────────────────────────────────────────────
   const auditResults: AuditResult[] = [
@@ -131,7 +138,7 @@ async function doScan(scanId: string, url: string, startTime: number): Promise<v
   });
 
   // ── Step 7: AI analysis ───────────────────────────────────────────────────────
-  let aiInsights;
+  let aiInsights: AIInsights | undefined;
   if (process.env.ANTHROPIC_API_KEY) {
     try {
       aiInsights = await generateAIInsights(
