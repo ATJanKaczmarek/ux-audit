@@ -1,0 +1,11 @@
+.next/
+node_modules/
+data/
+.env.local
+.env
+dist/
+coverage/
+/tmp/crawlee-*
+*.db
+*.db-shm
+*.db-wal
